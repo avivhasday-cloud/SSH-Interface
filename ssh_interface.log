@@ -1,0 +1,24 @@
+2022-07-28 21:41:46,276 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.4p1)
+2022-07-28 21:41:46,329 - paramiko.transport - INFO - Authentication (publickey) failed.
+2022-07-28 21:41:46,349 - paramiko.transport - INFO - Authentication (password) successful!
+2022-07-28 21:41:46,422 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.4p1)
+2022-07-28 21:41:46,522 - paramiko.transport - INFO - Authentication (publickey) failed.
+2022-07-28 21:41:46,563 - paramiko.transport - INFO - Authentication (password) successful!
+2022-07-28 21:41:47,699 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.4p1)
+2022-07-28 21:41:47,794 - paramiko.transport - INFO - Authentication (publickey) failed.
+2022-07-28 21:41:47,833 - paramiko.transport - INFO - Authentication (password) successful!
+2022-07-28 21:41:57,504 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.4p1)
+2022-07-28 21:41:57,598 - paramiko.transport - INFO - Authentication (publickey) failed.
+2022-07-28 21:41:57,636 - paramiko.transport - INFO - Authentication (password) successful!
+2022-07-28 21:41:58,680 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2022-07-28 21:41:58,682 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2022-07-28 21:41:58,754 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.4p1)
+2022-07-28 21:41:58,850 - paramiko.transport - INFO - Authentication (publickey) failed.
+2022-07-28 21:41:58,889 - paramiko.transport - INFO - Authentication (password) successful!
+2022-07-28 21:41:59,956 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
+2022-07-28 21:41:59,957 - root - INFO - Opening sftp connection to get files and folders in /home/aviv
+2022-07-28 21:41:59,970 - paramiko.transport.sftp - INFO - [chan 0] sftp session closed.
+2022-07-28 21:43:30,253 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_8.4p1)
+2022-07-28 21:43:30,304 - paramiko.transport - INFO - Authentication (publickey) failed.
+2022-07-28 21:43:30,324 - paramiko.transport - INFO - Authentication (password) successful!
+2022-07-28 21:43:31,372 - paramiko.transport.sftp - INFO - [chan 0] Opened sftp connection (server version 3)
