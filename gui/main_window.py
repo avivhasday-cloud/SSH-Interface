@@ -1,5 +1,6 @@
 import re
 import sys
+from datetime import datetime
 from utils.common import PAGE
 from utils.ssh_handler import SSHClient
 from gui.dialog import DialogMessageBox
@@ -50,12 +51,27 @@ class MainWindowUI(QMainWindow):
 
     def setup_onclick_functions_to_buttons(self):
         self.main_window_widget.disconnect_button.clicked.connect(self.on_disconnect_button_clicked)
-        self.main_window_widget.file_system_widget.search_button.clicked.connect(self.on_search_button_clicked)
+        self.main_window_widget.file_system_widget.execute_button.clicked.connect(self.on_search_button_clicked)
+        self.main_window_widget.shell_interaction_widget.execute_button.clicked.connect(self.on_run_command_button_clicked)
 
     @staticmethod
     def _clean_form(line_edit_list: [QLineEdit]):
         for line_edit in line_edit_list:
             line_edit.clear()
+
+    def on_run_command_button_clicked(self):
+        if self.ssh_client.is_connected:
+            command = self.main_window_widget.shell_interaction_widget.input_entry.text()
+            stdout_lines, stderr_lines = self.ssh_client.run_command(command)
+            datetime_str = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+            if len(stdout_lines) > 0:
+                text = "\n".join(stdout_lines)
+                output = f"{datetime_str} Output:\n {text}"
+                self.main_window_widget.shell_interaction_widget.shell_text_output_box.append(output)
+            elif len(stderr_lines) > 0:
+                text = "\n".join(stderr_lines)
+                output = f"{datetime_str} Error:\n {text}"
+                self.main_window_widget.shell_interaction_widget.shell_text_output_box.append(output)
 
     def on_disconnect_button_clicked(self):
         def _on_disconnect_from_server(self):
@@ -68,14 +84,14 @@ class MainWindowUI(QMainWindow):
         dialog_message.exec()
 
     def on_search_button_clicked(self):
-        remote_dir = self.main_window_widget.file_system_widget.search_entry.text()
+        remote_dir = self.main_window_widget.file_system_widget.input_entry.text()
         if self.ssh_client.is_path_exists(remote_dir):
             file_stats_list = self.ssh_client.get_files_and_folders_stats_in_remote_dir(remote_dir)
             self.main_window_widget.file_system_widget.insert_file_stats_to_table(file_stats_list)
         else:
             dialog_message = DialogMessageBox("Path is not exists in remote server")
             dialog_message.exec()
-            self._clean_form([self.main_window_widget.file_system_widget.search_entry])
+            self._clean_form([self.main_window_widget.file_system_widget.input_entry])
 
 
 def main():
