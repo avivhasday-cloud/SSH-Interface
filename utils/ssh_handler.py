@@ -25,12 +25,12 @@ class SSHClient:
         self.client = None
 
     @property
-    def connection(self):
+    def connection(self) -> [str, paramiko.SSHClient, None]:
         try:
             client = paramiko.SSHClient()
             client.load_system_host_keys()
             client.set_missing_host_key_policy(paramiko.RejectPolicy())
-            client.connect(hostname=self.ip, username=self.username, password=self.password, timeout=5000)
+            client.connect(hostname=self.ip, username=self.username, password=self.password, timeout=10)
             return_value = client
         except AuthenticationException:
             msg = "Authentication Error"
@@ -47,7 +47,7 @@ class SSHClient:
         return return_value if return_value else None
 
     @property
-    def scp(self):
+    def scp(self) -> SCPClient:
         conn = self.connection
         return SCPClient(conn.get_transport())
 
@@ -59,9 +59,9 @@ class SSHClient:
             self.scp.close()
 
     def is_connected(self) -> bool:
-        return True if self.connection else False
+        return True if type(self.connection) == paramiko.SSHClient else False
 
-    def is_path_exists(self, path: str):
+    def is_path_exists(self, path: str) -> bool:
         try:
             sftp = self.connection.open_sftp()
             path = sftp.stat(path)

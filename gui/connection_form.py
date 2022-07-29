@@ -1,3 +1,5 @@
+from PyQt6.QtCore import QRegularExpression
+from PyQt6.QtGui import QRegularExpressionValidator
 from PyQt6.QtWidgets import QLabel, QFormLayout, QLineEdit, QWidget, QPushButton
 
 class ConnectionFormWidget(QWidget):
