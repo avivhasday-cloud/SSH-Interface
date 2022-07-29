@@ -1,5 +1,4 @@
-from PyQt6.QtCore import QRegularExpression
-from PyQt6.QtGui import QRegularExpressionValidator
+import re
 from PyQt6.QtWidgets import QLabel, QFormLayout, QLineEdit, QWidget, QPushButton
 
 class ConnectionFormWidget(QWidget):
@@ -19,5 +18,6 @@ class ConnectionFormWidget(QWidget):
         layout.addWidget(self.btn1)
         self.setLayout(layout)
 
-
+    def validate_input(self):
+        return re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', self.ip_entry.text()) and len(self.user_entry.text()) != 0 and len(self.password_entry.text()) != 0
 

@@ -2,6 +2,11 @@ import json
 import logging
 from enum import IntEnum
 
+class STAGE(IntEnum):
+    IDLE = 0
+    ONGOING_TRANSFER = 1
+    DONE = 2
+
 
 class FILETYPE(IntEnum):
     DIRECTORY = 0

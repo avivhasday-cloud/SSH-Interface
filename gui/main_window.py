@@ -1,9 +1,10 @@
 import re
 import sys
 from datetime import datetime
-from utils.common import PAGE
+from utils.common import PAGE, STAGE
 from utils.ssh_handler import SSHClient
 from gui.dialog import DialogMessageBox
+from gui.transfer_form import TransferFormWidget
 from gui.main_page_widget import MainWindowWidget
 from gui.connection_form import ConnectionFormWidget
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget,  QLineEdit
@@ -26,13 +27,16 @@ class MainWindowUI(QMainWindow):
         self.stack.setCurrentIndex(PAGE.FORM_PAGE.value)
         self.setCentralWidget(self.stack)
 
-    def _input_is_valid(self):
-        return re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', self.form_connection_widget.ip_entry.text()) \
-               and len(self.form_connection_widget.user_entry.text()) != 0 \
-               and len(self.form_connection_widget.password_entry.text()) != 0
+    def _input_is_valid(self, widget) -> bool:
+        is_valid = False
+        if isinstance(widget, ConnectionFormWidget):
+            is_valid = widget.validate_input()
+        elif isinstance(widget, TransferFormWidget):
+            is_valid = widget.validate_input(self.ssh_client)
+        return is_valid
 
     def on_connect_button_clicked(self):
-        if self._input_is_valid():
+        if self._input_is_valid(self.form_connection_widget):
             self.ssh_client = SSHClient(ip=self.form_connection_widget.ip_entry.text(),
                                         username=self.form_connection_widget.user_entry.text(),
                                         password=self.form_connection_widget.password_entry.text())
@@ -53,6 +57,7 @@ class MainWindowUI(QMainWindow):
         self.main_window_widget.disconnect_button.clicked.connect(self.on_disconnect_button_clicked)
         self.main_window_widget.file_system_widget.execute_button.clicked.connect(self.on_search_button_clicked)
         self.main_window_widget.shell_interaction_widget.execute_button.clicked.connect(self.on_run_command_button_clicked)
+        self.main_window_widget.transfer_form_widget.transfer_button.clicked.connect(self.on_begin_transfer_button_clicked)
 
     @staticmethod
     def _clean_form(line_edit_list: [QLineEdit]):
@@ -92,6 +97,20 @@ class MainWindowUI(QMainWindow):
             dialog_message = DialogMessageBox("Path is not exists in remote server")
             dialog_message.exec()
             self._clean_form([self.main_window_widget.file_system_widget.input_entry])
+
+    def on_begin_transfer_button_clicked(self):
+        if self._input_is_valid(self.main_window_widget.transfer_form_widget):
+            is_recursive = self.main_window_widget.transfer_form_widget.is_item_checked(self.main_window_widget.transfer_form_widget.recursive_checkbox)
+            remote_to_local_host = self.main_window_widget.transfer_form_widget.is_item_checked(self.main_window_widget.transfer_form_widget.rth_checkbox)
+            local_path = self.main_window_widget.transfer_form_widget.local_path_entry.text()
+            remote_path = self.main_window_widget.transfer_form_widget.remote_path_entry.text()
+            if self.ssh_client.is_connected():
+                self.main_window_widget.transfer_form_widget.set_stage_status(STAGE.ONGOING_TRANSFER.name)
+                self.ssh_client.transfer_files(local_path=local_path, remote_path=remote_path, host_to_local=remote_to_local_host, recursive=is_recursive)
+                self.main_window_widget.transfer_form_widget.set_stage_status(STAGE.DONE.name)
+        else:
+            dialog_message = DialogMessageBox("Input isnt valid, please check that the given paths exists!")
+            dialog_message.exec()
 
 
 def main():

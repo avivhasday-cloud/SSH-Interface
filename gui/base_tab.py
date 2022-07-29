@@ -9,6 +9,7 @@ class BaseTab(QWidget):
         self.hbox = QHBoxLayout()
         self.sub_vbox = QVBoxLayout()
         self.input_entry = QLineEdit()
+        self.input_entry.setFixedHeight(30)
         self.input_entry.setPlaceholderText(input_placeholder_text)
         self.execute_button = QPushButton(search_button_text)
         self.clear_button = QPushButton(clear_button_text)

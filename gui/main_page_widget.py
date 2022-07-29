@@ -1,6 +1,7 @@
 from utils.ssh_handler import SSHClient
 from gui.file_system import FileSystemWidget
 from gui.system_stats import SystemStatsWidget
+from gui.transfer_form import TransferFormWidget
 from gui.shell_intereaction_widget import ShellInteractionWidget
 from PyQt6.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QHBoxLayout
 
@@ -17,6 +18,7 @@ class MainWindowWidget(QWidget):
         self.file_system_widget = FileSystemWidget()
         self.system_monitor = QWidget()
         self.shell_interaction_widget = ShellInteractionWidget()
+        self.transfer_form_widget = TransferFormWidget()
 
 
         vbox_sub_layout.addWidget(self.disconnect_button)
@@ -43,3 +45,4 @@ class MainWindowWidget(QWidget):
         self.tab_widget.addTab(self.file_system_widget, "Browser")
         self.tab_widget.addTab(self.system_monitor, "Monitor")
         self.tab_widget.addTab(self.shell_interaction_widget, "Shell")
+        self.tab_widget.addTab(self.transfer_form_widget, "Transfer Files")
