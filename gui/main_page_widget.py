@@ -1,6 +1,7 @@
 from utils.ssh_handler import SSHClient
 from gui.file_system import FileSystemWidget
 from gui.system_stats import SystemStatsWidget
+from gui.shell_intereaction_widget import ShellInteractionWidget
 from PyQt6.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QHBoxLayout
 
 
@@ -15,6 +16,7 @@ class MainWindowWidget(QWidget):
         self.shutdown_button = QPushButton("Shutdown")
         self.file_system_widget = FileSystemWidget()
         self.system_monitor = QWidget()
+        self.shell_interaction_widget = ShellInteractionWidget()
 
 
         vbox_sub_layout.addWidget(self.disconnect_button)
@@ -40,3 +42,4 @@ class MainWindowWidget(QWidget):
             self.system_monitor.setLayout(vbox_layout)
         self.tab_widget.addTab(self.file_system_widget, "Browser")
         self.tab_widget.addTab(self.system_monitor, "Monitor")
+        self.tab_widget.addTab(self.shell_interaction_widget, "Shell")

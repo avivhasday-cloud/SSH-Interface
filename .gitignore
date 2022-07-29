@@ -1,3 +1,4 @@
 .idea
 .DS_Store
 ssh_interface.log
+__pycache__
