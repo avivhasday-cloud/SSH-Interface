@@ -2,6 +2,7 @@ from utils.ssh_handler import SSHClient
 from gui.file_system import FileSystemWidget
 from gui.system_stats import SystemStatsWidget
 from gui.transfer_form import TransferFormWidget
+from gui.services_widget import ServicesWidget
 from gui.shell_intereaction_widget import ShellInteractionWidget
 from PyQt6.QtWidgets import QTabWidget, QLabel, QWidget, QVBoxLayout, QPushButton, QHBoxLayout
 
@@ -19,6 +20,7 @@ class MainWindowWidget(QWidget):
         self.system_monitor = QWidget()
         self.shell_interaction_widget = ShellInteractionWidget()
         self.transfer_form_widget = TransferFormWidget()
+        self.services_widget = ServicesWidget()
 
 
         vbox_sub_layout.addWidget(self.disconnect_button)
@@ -36,13 +38,16 @@ class MainWindowWidget(QWidget):
         vbox_layout = QVBoxLayout()
         if ssh_client:
             disk_stats_list, ram_stats = ssh_client.get_system_stats(['/'])
+            services_list = ssh_client.list_services()
             ram_stats_widget = SystemStatsWidget("RAM", ram_stats)
             disk_stats_widget_list = [SystemStatsWidget("DISK", disk_stats) for disk_stats in disk_stats_list]
             vbox_layout.addWidget(ram_stats_widget)
             for disk_stats_widget in disk_stats_widget_list:
                 vbox_layout.addWidget(disk_stats_widget)
             self.system_monitor.setLayout(vbox_layout)
+            self.services_widget.init_service_widgets(services_list)
         self.tab_widget.addTab(self.file_system_widget, "Browser")
         self.tab_widget.addTab(self.system_monitor, "Monitor")
         self.tab_widget.addTab(self.shell_interaction_widget, "Shell")
         self.tab_widget.addTab(self.transfer_form_widget, "Transfer Files")
+        self.tab_widget.addTab(self.services_widget, "Services")

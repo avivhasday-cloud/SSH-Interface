@@ -16,7 +16,7 @@ class SSHClient:
     QUERY_RAM_STATS = 'free -g'
     QUERY_DISK_STATS = 'df -h /'
     QUERY_CPU_STATS = ''
-    QUERY_SYSTEMD_SERVICES = 'systemctl list-units --type=service | grep systemd'
+    QUERY_SYSTEMD_SERVICES = 'systemctl list-units --type=service | grep My'
 
     def __init__(self, ip: str, username: str, password: str):
         self.ip = ip
@@ -156,5 +156,5 @@ class SSHClient:
     def list_services(self):
         stdout, stderr = self.run_command(SSHClient.QUERY_SYSTEMD_SERVICES)
         keys = ['service_name', 'loaded', 'active', 'status', 'description']
-        services_list = [dict(zip(keys, line.split())) for line in stdout]
+        services_list = [dict(zip(keys, line.strip().split(maxsplit=4))) for line in stdout]
         return services_list
